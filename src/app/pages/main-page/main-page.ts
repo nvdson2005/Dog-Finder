@@ -6,7 +6,7 @@ import BreedCard from '@components/breed-card/breed-card';
   template: `
     <div class="w-screen h-screen flex items-center justify-center">
       <div>
-        <app-breed-card [showDetails]="false"></app-breed-card>
+        <app-breed-card [showDetails]="true"></app-breed-card>
       </div>
     </div>
   `,
