@@ -1,10 +1,10 @@
 import { Component, input } from '@angular/core';
-import { CardAction } from 'src/app/directives/card-action';
+import { CardActionDirective } from 'src/app/directives/card-action.directive';
 import { Breed } from 'src/app/types/breed';
 import { CardActionType } from 'src/app/types/card-action-type';
 @Component({
   selector: 'app-breed-card',
-  imports: [CardAction],
+  imports: [CardActionDirective],
   template: `
     <div class="w-120 h-160 p-2 bg-slate-500 flex flex-col items-center justify-center">
       <div class="w-full flex-4/5 bg-blue-100 relative overflow-hidden">
@@ -45,14 +45,8 @@ import { CardActionType } from 'src/app/types/card-action-type';
       </div>
       <div class="w-full flex-1/5">
         <div class="w-full h-full flex py-3 items-center justify-between gap-56 px-4">
-          <button [appCardAction]="'dislike'" class="w-full h-full bg-blue-500 text-white py-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors duration-200">
-            Dislike
-          </button>
-          <button [appCardAction]="'like'"
-            class="w-full h-full bg-green-500 text-white py-2 rounded-full ml-2 cursor-pointer hover:bg-green-700 transition-colors duration-200"
-          >
-            Like
-          </button>
+          <button [appCardAction]="'dislike'">Dislike</button>
+          <button [appCardAction]="'like'">Like</button>
         </div>
       </div>
     </div>
