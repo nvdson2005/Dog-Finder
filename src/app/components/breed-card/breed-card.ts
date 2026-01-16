@@ -4,7 +4,7 @@ import { CardActionDirective } from '@directives/card-action.directive';
 import { Breed } from '@type/breed';
 import { CardActionType } from '@type/card';
 
-interface BreadInfo {
+type BreadInfo = {
   readonly breed: Signal<Breed>;
 }
 

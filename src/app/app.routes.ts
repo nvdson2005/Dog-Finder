@@ -16,9 +16,4 @@ export const routes: Routes = [
       }
     ]
   },
-  // {
-  //   path: 'detail',
-  //   pathMatch: 'full',
-  //   loadComponent: () => import('@pages/detail-page/detail-page')
-  // }
 ];

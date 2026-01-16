@@ -1,4 +1,4 @@
-interface IBreed {
+export type Breed = {
   breedName: string;
   breedFor: string;
   breedGroup: string;
@@ -7,6 +7,4 @@ interface IBreed {
   lifeSpan: string;
   temperament: string;
   imageUrl: string;
-}
-
-export type Breed = IBreed;
+};
