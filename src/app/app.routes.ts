@@ -8,11 +8,11 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        loadComponent: () => import('@components/breed-image/breed-image').then(m => m.BreedImageComponent)
+        loadComponent: () => import('@pages/breed-image/breed-image').then(m => m.BreedImageComponent)
       }, {
         path: 'details',
         pathMatch: 'full',
-        loadComponent: () => import('@components/breed-detail/breed-detail').then(m => m.BreedDetailsComponent)
+        loadComponent: () => import('@pages/breed-detail/breed-detail').then(m => m.BreedDetailsComponent)
       }
     ]
   },
