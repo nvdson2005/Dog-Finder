@@ -1,8 +1,8 @@
-import { CardAction } from './card-action';
+import { CardActionDirective } from './card-action.directive';
 
-describe('CardAction', () => {
+describe('CardActionDirective', () => {
   it('should create an instance', () => {
-    const directive = new CardAction();
+    const directive = new CardActionDirective();
     expect(directive).toBeTruthy();
   });
 });

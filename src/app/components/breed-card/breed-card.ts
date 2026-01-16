@@ -1,47 +1,27 @@
-import { Component, input } from '@angular/core';
-import { CardActionDirective } from 'src/app/directives/card-action.directive';
-import { Breed } from 'src/app/types/breed';
-import { CardActionType } from 'src/app/types/card-action-type';
+import { Component, InjectionToken, input, Signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { CardActionDirective } from '@directives/card-action.directive';
+import { Breed } from '@type/breed';
+import { CardActionType } from '@type/card';
+
+interface BreadInfo {
+  readonly breed: Signal<Breed>;
+}
+
+const BREED_INFO = new InjectionToken<BreadInfo>('BREED_INFO');
 @Component({
   selector: 'app-breed-card',
-  imports: [CardActionDirective],
+  imports: [CardActionDirective, RouterOutlet],
+  providers: [
+    {
+      provide: BREED_INFO,
+      useExisting: BreedCard,
+    },
+  ],
   template: `
     <div class="w-120 h-160 p-2 bg-slate-500 flex flex-col items-center justify-center">
       <div class="w-full flex-4/5 bg-blue-100 relative overflow-hidden">
-        @if (showDetails()) {
-        <div class="w-full h-full text-black p-2 flex flex-col gap-4">
-          <div class="w-full">
-            <h6 class="text-2xl font-bold">Breed Name</h6>
-            <p class="text-xl">{{ breed().breedName }}</p>
-          </div>
-          <div class="w-full">
-            <h6 class="text-2xl font-bold">Breed For</h6>
-            <p class="text-xl">{{ breed().breedFor }}</p>
-          </div>
-          <div class="w-full">
-            <h6 class="text-2xl font-bold">Weight and Height</h6>
-            <p class="text-xl">{{ breed().weight }} and {{ breed().height }}</p>
-          </div>
-          <div class="w-full">
-            <h6 class="text-2xl font-bold">Breed Group</h6>
-            <p class="text-xl">{{ breed().breedGroup }}</p>
-          </div>
-          <div class="w-full">
-            <h6 class="text-2xl font-bold">Temperament</h6>
-            <p class="text-xl">{{ breed().temperament }}</p>
-          </div>
-          <div class="w-full">
-            <h6 class="text-2xl font-bold">Life Span</h6>
-            <p class="text-xl">{{ breed().lifeSpan }}</p>
-          </div>
-        </div>
-        } @else {
-        <img [src]="breed().imageUrl" class="w-full object-cover" alt="Dog Breed" />
-        <div class="absolute bottom-2 left-2 w-3/4 bg-black/90 bg-opacity-50 text-white p-2">
-          <h2 class="text-lg font-bold">{{ breed().breedName }}</h2>
-          <p class="text-sm">Breed For {{ breed().breedFor }}</p>
-        </div>
-        }
+        <router-outlet [routerOutletData]="breed()" />
       </div>
       <div class="w-full flex-1/5">
         <div class="w-full h-full flex py-3 items-center justify-between gap-56 px-4">
@@ -52,7 +32,8 @@ import { CardActionType } from 'src/app/types/card-action-type';
     </div>
   `,
 })
-class BreedCard {
+class BreedCard implements BreadInfo {
+  readonly cardAction = input<CardActionType>('idle');
   readonly breed = input<Breed>({
     breedName: 'Afghan Hound',
     breedFor: 'Coursing and hunting',
@@ -63,7 +44,5 @@ class BreedCard {
     temperament: 'Aloof, dignified, independent, sweet-natured',
     imageUrl: 'https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg',
   });
-  readonly showDetails = input(false);
-  readonly cardAction = input<CardActionType>('idle');
 }
 export default BreedCard;

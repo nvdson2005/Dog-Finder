@@ -1,20 +1,21 @@
-import { computed, Directive, input, Input, output } from '@angular/core';
-import { CardActionType } from '../types/card-action-type';
+import { computed, Directive, input } from '@angular/core';
+import { CardActionType } from '@type/card';
 
 @Directive({
   selector: '[appCardAction]',
   host: {
-    '(click)': 'handleClick()',
+    '(click)': 'handleClick($event)',
     '[class]': 'colorClass()',
-  }
+  },
 })
 export class CardActionDirective {
   readonly appCardAction = input<CardActionType>();
-  handleClick() {
-    // console.log(`Card action triggered: ${this.appCardAction()}`);
+  handleClick($event: Event) {
+    $event.stopPropagation();
   }
   readonly colorClass = computed(() => {
-    const baseClass = 'w-full h-full text-white py-2 rounded-full cursor-pointer transition-colors duration-200 ';
+    const baseClass =
+      'w-full h-full text-white py-2 rounded-full cursor-pointer transition-colors duration-200 ';
     switch (this.appCardAction()) {
       case 'like':
         return baseClass + 'bg-green-500 hover:bg-green-700';
@@ -23,5 +24,5 @@ export class CardActionDirective {
       default:
         return baseClass + 'bg-gray-500 hover:bg-gray-700';
     }
-  })
+  });
 }
