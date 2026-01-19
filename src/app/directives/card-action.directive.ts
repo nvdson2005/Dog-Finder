@@ -10,9 +10,6 @@ import { CardActionType } from '@type/card';
 })
 export class CardActionDirective {
   readonly appCardAction = input<CardActionType>();
-  handleClick($event: Event) {
-    $event.stopPropagation();
-  }
   readonly colorClass = computed(() => {
     const baseClass =
       'w-full h-full text-white py-2 rounded-full cursor-pointer transition-colors duration-200 ';
@@ -25,4 +22,7 @@ export class CardActionDirective {
         return baseClass + 'bg-gray-500 hover:bg-gray-700';
     }
   });
+  handleClick($event: Event) {
+    $event.stopPropagation();
+  }
 }

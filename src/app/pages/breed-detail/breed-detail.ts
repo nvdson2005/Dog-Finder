@@ -5,7 +5,7 @@ import { Breed } from '@type/breed';
   imports: [RouterLink],
   template: `
     @let breedData = breed();
-    <div [routerLink]="['']">
+    <div class="w-full h-full p-2" [routerLink]="['']">
       <div class="w-full">
         <h6 class="text-2xl font-bold">Breed Name</h6>
         <p class="text-xl">{{ breedData.breedName }}</p>
