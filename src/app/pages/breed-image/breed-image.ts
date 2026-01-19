@@ -16,7 +16,4 @@ import { ROUTER_OUTLET_DATA } from '@angular/router';
 })
 export class BreedImageComponent {
   breed = inject<() => Breed>(ROUTER_OUTLET_DATA);
-  constructor() {
-    console.log('Breed Image Component initialized with breed:', this.breed());
-  }
 }

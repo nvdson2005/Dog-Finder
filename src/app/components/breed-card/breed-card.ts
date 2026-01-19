@@ -13,9 +13,9 @@ import { startWith, Subject, switchMap } from 'rxjs';
     <div class="w-120 h-160 p-2 bg-slate-500 flex flex-col items-center justify-center">
       <div class="w-full flex-4/5 bg-blue-100 relative ">
         <div class="absolute w-full h-full overflow-hidden">
-        @if (breedInfo$ | async; as breedData) {
-          <router-outlet [routerOutletData]="breedData"/>
-        }
+          @if (breedInfo$ | async; as breedData) {
+          <router-outlet [routerOutletData]="breedData" />
+          }
         </div>
       </div>
       <div class="w-full flex-1/5">
@@ -32,12 +32,8 @@ class BreedCard {
   private readonly breedApiService = inject(BreedApiService);
   readonly breedInfo$ = this.refresh$.pipe(
     startWith(void 0),
-    switchMap(() => this.breedApiService.fetchBreedInfo()),
+    switchMap(() => this.breedApiService.fetchBreedInfo())
   );
-  constructor() {
-    // this.refresh$.next();
-    // this.breedInfo$.subscribe(data => console.log('Fetched breed info:', data));
-  }
   refresh() {
     this.refresh$.next();
   }
