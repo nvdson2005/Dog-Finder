@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CardActionDirective } from '@directives/card-action.directive';
 // import { fetchBreedInfo } from 'src/app/core/api/breed.api';
-import { BreedApiService } from 'src/app/core/api/breed.api';
+import { BreedApiService } from '@core/api/breed.api';
 import { AsyncPipe } from '@angular/common';
 import { startWith, Subject, switchMap } from 'rxjs';
 @Component({
