@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, InjectionToken, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { scan, switchMap } from 'rxjs';
 import { BreedApiService } from '@core/api/breed.api';
@@ -29,6 +29,10 @@ import { Router, ActivatedRoute } from '@angular/router';
   `,
 })
 export class MainPage {
+  PAGE_SIZE = new InjectionToken<number>('PAGE_SIZE', {
+    factory: () => 10,
+  });
+
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly breedApiService = inject(BreedApiService);
@@ -36,7 +40,7 @@ export class MainPage {
   private readonly currentPage = signal(1);
   private readonly currentIndex = signal(0);
 
-  private readonly infoPerPage = 10;
+  private readonly infoPerPage = inject(this.PAGE_SIZE);
 
   readonly currentPage$ = toObservable(this.currentPage);
   readonly dogList$ = this.currentPage$.pipe(
