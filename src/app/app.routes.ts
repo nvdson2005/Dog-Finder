@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+import { quitGuard } from './guards/quit-guard';
 export const routes: Routes = [
   {
     path: '',
@@ -18,5 +18,6 @@ export const routes: Routes = [
           import('@pages/breed-detail/breed-detail').then((m) => m.BreedDetailsComponent),
       },
     ],
-  },
+    canDeactivate: [quitGuard]
+  }
 ];

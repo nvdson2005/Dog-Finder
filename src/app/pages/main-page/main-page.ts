@@ -6,11 +6,13 @@ import { RouterOutlet } from '@angular/router';
 import { CardActionDirective } from '@directives/card-action.directive';
 import { ApiBreedImage } from '@type/breed';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NavBar } from '@components/nav-bar/nav-bar';
 @Component({
   selector: 'app-main-page',
-  imports: [RouterOutlet, CardActionDirective],
+  imports: [RouterOutlet, CardActionDirective, NavBar],
   providers: [BreedApiService],
   template: `
+    <app-nav-bar></app-nav-bar>
     <div class="w-screen h-screen flex items-center justify-center">
       <div class="w-120 h-160 p-2 bg-slate-500 flex flex-col items-center justify-center">
         <div class="w-full flex-4/5 bg-blue-100 relative ">
