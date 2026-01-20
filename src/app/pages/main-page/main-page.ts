@@ -5,6 +5,7 @@ import { BreedApiService } from '@core/api/breed.api';
 import { RouterOutlet } from '@angular/router';
 import { CardActionDirective } from '@directives/card-action.directive';
 import { ApiBreedImage } from '@type/breed';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-main-page',
   imports: [RouterOutlet, CardActionDirective],
@@ -28,17 +29,19 @@ import { ApiBreedImage } from '@type/breed';
   `,
 })
 export class MainPage {
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly breedApiService = inject(BreedApiService);
 
   private readonly currentPage = signal(1);
-  private currentIndex = signal(0);
+  private readonly currentIndex = signal(0);
 
-  private infoPerPage = 10;
+  private readonly infoPerPage = 10;
 
   readonly currentPage$ = toObservable(this.currentPage);
   readonly dogList$ = this.currentPage$.pipe(
     switchMap((page) => this.breedApiService.fetchBreedInfo(this.infoPerPage, page)),
-    scan((allDogs, newDogs) => [...allDogs, ...newDogs], [] as ApiBreedImage[])
+    scan((allDogs, newDogs) => [...allDogs, ...newDogs], [] as ApiBreedImage[]),
   );
   readonly dogList = toSignal(this.dogList$, { initialValue: [] });
 
@@ -48,18 +51,15 @@ export class MainPage {
   });
 
   readonly _watchCurrentIndexChange = effect(() => {
-    if(this.infoPerPage * this.currentPage() - this.currentIndex() <= 3) {
+    if (this.infoPerPage * this.currentPage() - this.currentIndex() <= 3) {
       this.currentPage.update((page) => page + 1);
     }
   });
 
   nextDog() {
     this.currentIndex.update((index) => index + 1);
-    // if(this.dogList().length - this.currentIndex() <= 3) {
-    //   this.currentPage.update((page) => page + 1);
-    //   console.log('Fetching next page:', this.currentPage());
-    //   this.currentIndex.set(0);
-    //   this.infoPerPage  = 7;
-    // }
+    if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != '') {
+      this.router.navigate([this.currentDog().id]);
+    }
   }
 }
