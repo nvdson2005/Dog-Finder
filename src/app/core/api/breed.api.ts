@@ -27,7 +27,6 @@ export class BreedApiService {
     const apiUrl = new URL(`/v1/images/${id}`, baseUrl);
     return this.httpClient.get<ApiBreedImage>(apiUrl.toString()).pipe(
       map((breedData) => {
-        // return this.breedApiPipe.transform(breedData);
         return mapApiToBreed(breedData);
       }),
       catchError((error) => {

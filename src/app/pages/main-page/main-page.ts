@@ -62,7 +62,7 @@ export class MainPage {
 
   nextDog() {
     this.currentIndex.update((index) => index + 1);
-    if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != '') {
+    if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != null) {
       this.router.navigate([this.currentDog().id]);
     }
   }
