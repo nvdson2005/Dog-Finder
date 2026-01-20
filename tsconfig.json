@@ -17,7 +17,12 @@
     "baseUrl": ".",
     "paths": {
       "@pages/*": ["./src/app/pages/*"],
-      "@components/*": ["./src/app/components/*"]
+      "@components/*": ["./src/app/components/*"],
+      "@directives/*": ["./src/app/directives/*"],
+      "@type/*": ["./src/app/types/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@core/*": ["./src/app/core/*"],
+      "@shared/*": ["./src/app/shared/*"]
     }
   },
   "angularCompilerOptions": {
