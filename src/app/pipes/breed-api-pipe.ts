@@ -4,9 +4,9 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class BreedApiPipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: string | undefined | null): string {
     if (!value || value.length === 0) {
-      return 'unknown';
+      return 'No information';
     }
     return value;
   }
