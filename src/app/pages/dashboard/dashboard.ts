@@ -10,7 +10,9 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
     <div class="w-screen h-screen bg-slate-200">
       <app-nav-bar></app-nav-bar>
       <div class="w-full h-full flex flex-col items-start pt-20 px-2">
-        <h1 class="text-xl font-bold">Number of liked dogs: {{ breedCount.getValue().length }}</h1>
+        <h1 class="text-xl font-bold">
+          Number of liked breeds: {{ breedCount.getValue().length }}
+        </h1>
         <div class="mt-4 w-full grid-cols-4">
           @for (breed of breedCount.getValue(); track $index) {
             <button

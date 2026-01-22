@@ -63,7 +63,7 @@ export class MainPage {
   nextDog(isLike = false) {
     if (isLike) {
       this.breedCount.next([...this.breedCount.getValue(), this.currentDog()]);
-      console.log('Liked dog:', this.breedCount.getValue());
+      console.log('Liked breeds:', this.breedCount.getValue());
     }
     this.currentIndex.update((index) => index + 1);
     if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != null) {
