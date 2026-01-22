@@ -22,7 +22,8 @@
       "@type/*": ["./src/app/types/*"],
       "@services/*": ["./src/app/services/*"],
       "@core/*": ["./src/app/core/*"],
-      "@shared/*": ["./src/app/shared/*"]
+      "@shared/*": ["./src/app/shared/*"],
+      "@environments/*": ["./src/environments/*"]
     }
   },
   "angularCompilerOptions": {

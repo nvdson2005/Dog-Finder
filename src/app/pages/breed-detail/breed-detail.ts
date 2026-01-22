@@ -8,7 +8,7 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
   imports: [RouterLink, BreedApiPipe],
   template: `
     @if (breedData(); as breedData) {
-      <div class="w-full h-full p-2" [routerLink]="['']">
+      <div class="w-full h-full p-2" [routerLink]="['..']">
         <div class="w-full">
           <h6 class="text-2xl font-bold">Breed Name</h6>
           <p class="text-xl">{{ breedData.breedName | breedApi }}</p>
@@ -41,10 +41,13 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
 })
 export class BreedDetailsComponent {
   private readonly breedApiService = inject(BreedApiService);
+
   readonly breedId = input<string>('');
+
   private readonly breedId$ = toObservable(this.breedId);
   private readonly breedData$ = this.breedId$.pipe(
     switchMap((id) => this.breedApiService.fetchBreedDetail(id)),
   );
+
   readonly breedData = toSignal(this.breedData$, { initialValue: null });
 }

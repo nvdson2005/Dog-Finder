@@ -1,3 +1,3 @@
 export const environment = {
-  BASE_URL: 'https://api.thecatapi.com/v1',
+  BASE_DOG_URL: 'https://api.thecatapi.com/v1',
 };
