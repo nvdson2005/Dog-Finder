@@ -63,4 +63,14 @@ export class BreedApiService {
       }),
     );
   }
+
+  removeFromFavorites(favoriteId: number) {
+    const apiUrl = new URL(`/v1/favourites/${favoriteId}`, this.baseUrl);
+    return this.httpClient.delete(apiUrl.toString()).pipe(
+      catchError((error) => {
+        console.error('Error removing breed from favorites:', error);
+        return throwError(() => new Error('Failed to remove breed from favorites'));
+      }),
+    );
+  }
 }

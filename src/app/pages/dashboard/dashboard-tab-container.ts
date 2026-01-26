@@ -1,10 +1,9 @@
 import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, TemplateRef } from '@angular/core';
+import { Component, output, TemplateRef } from '@angular/core';
 import { computed, input, viewChild } from '@angular/core';
 import { FavoriteBreedResponse } from '@type/breed';
 import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
-
 @Component({
   imports: [BreedApiPipe, NgTemplateOutlet, LikedBreedsTabDirective],
   selector: 'app-dashboard-tab-container',
@@ -14,14 +13,17 @@ import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
       [ngTemplateOutletContext]="{ $implicit: likedBreedsList() }"
       appLikedBreedsTab
     />
-    <ng-template appLikedBreedsTab #likedBreeds let-t>
+    <ng-template appLikedBreedsTab #likedBreeds let-breeds>
       <div class="w-full h-full flex flex-col items-start pt-20 px-2">
-        <h1 class="text-xl font-bold">Number of liked breeds: {{ t.length }}</h1>
+        <h1 class="text-xl font-bold">Number of liked breeds: {{ breeds.length }}</h1>
         <div class="mt-4 w-full grid-cols-4">
-          @for (breed of t; track $index) {
-            <button
+          @for (breed of breeds; track $index) {
+            <div
               class="w-40 h-40 m-2 p-2 bg-white rounded-lg shadow-md inline-block relative group"
             >
+            <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700  transition-colors duration-300  z-10" (click)="emitRemoveEvent(breed.id)">
+              &times;
+            </button>
               <img
                 class="w-full h-full object-cover rounded-lg"
                 [src]="breed.image.url"
@@ -32,7 +34,7 @@ import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
               >
                 {{ breed.image.breeds[0]?.name ?? 'A cute unnamed dog' }}
               </div>
-            </button>
+            </div>
           }
         </div>
       </div>
@@ -54,6 +56,7 @@ import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
 export class DashboardTabContainer {
   readonly isLoading = input(false);
   readonly likedBreedsList = input<FavoriteBreedResponse[] | null>(null);
+  readonly breedRemoved = output<number>();
 
   private readonly likedBreedsTemplate =
     viewChild.required<TemplateRef<BreedContext>>('likedBreeds');
@@ -69,4 +72,8 @@ export class DashboardTabContainer {
         ? this.likedBreedsTemplate()
         : this.noLikedBreedsTemplate(),
   );
+
+  emitRemoveEvent(id: number) {
+    this.breedRemoved.emit(id);
+  }
 }
