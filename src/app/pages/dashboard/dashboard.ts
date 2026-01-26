@@ -1,38 +1,45 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  Directive,
+  inject,
+  signal,
+  TemplateRef,
+  viewChild,
+} from '@angular/core';
 import { NavBar } from '@components/nav-bar/nav-bar';
-import { ApiBreedImage } from '@type/breed';
-import { BREED_COUNT } from 'src/app/app.routes';
+import { ApiBreedImage, FavoriteBreedResponse } from '@type/breed';
 import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
+import { NgTemplateOutlet } from '@angular/common';
+import { BreedApiService } from '@core/api/breed.api';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { shareReplay, tap } from 'rxjs';
+
+type BreedContext = {
+  $implicit: FavoriteBreedResponse[];
+};
+
+@Directive({
+  selector: '[appLikedBreedsTab]',
+})
+export class LikedBreedsTabDirective {
+  static ngTemplateContextGuard(dir: LikedBreedsTabDirective, ctx: unknown): ctx is BreedContext {
+    return true;
+  }
+}
+
 @Component({
   selector: 'app-dashboard',
-  imports: [NavBar, BreedApiPipe],
+  imports: [NavBar, BreedApiPipe, NgTemplateOutlet, LikedBreedsTabDirective],
+  providers: [BreedApiService],
   template: `
     <div class="w-screen h-screen bg-slate-200">
       <app-nav-bar></app-nav-bar>
-      <div class="w-full h-full flex flex-col items-start pt-20 px-2">
-        <h1 class="text-xl font-bold">
-          Number of liked breeds: {{ breedCount.getValue().length }}
-        </h1>
-        <div class="mt-4 w-full grid-cols-4">
-          @for (breed of breedCount.getValue(); track $index) {
-            <button
-              (click)="showDetails(breed)"
-              class="w-40 h-40 m-2 p-2 bg-white rounded-lg shadow-md inline-block relative group"
-            >
-              <img
-                class="w-full h-full object-cover rounded-lg"
-                [src]="breed.url"
-                [alt]="breed.breeds[0]?.name | breedApi"
-              />
-              <div
-                class="absolute bottom-0 left-0 w-full bg-black/90 bg-opacity-50 text-white text-sm p-1 rounded-b-lg transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-              >
-                {{ breed.breeds[0]?.name ?? 'A cute unnamed dog' }}
-              </div>
-            </button>
-          }
-        </div>
-      </div>
+      <ng-container
+        appLikedBreedsTab
+        [ngTemplateOutlet]="templateToShow()"
+        [ngTemplateOutletContext]="{ $implicit: breedCount() }"
+      />
       @if (chosenBreed(); as breed) {
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -42,11 +49,11 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
             <img
               class="w-full h-64 object-cover rounded-lg mb-4"
               [src]="breed!.url"
-              [alt]="breed!.breeds[0]?.name ?? 'A cute unnamed dog' | breedApi"
+              [alt]="breed!.breeds[0]?.name ?? 'A cute unnamed dog' | breedApiPipe"
             />
-            <p><strong>Temperament:</strong> {{ breed!.breeds[0]?.temperament | breedApi }}</p>
-            <p><strong>Life Span:</strong> {{ breed!.breeds[0]?.life_span | breedApi }}</p>
-            <p><strong>Origin:</strong> {{ breed!.breeds[0]?.origin | breedApi }}</p>
+            <p><strong>Temperament:</strong> {{ breed!.breeds[0]?.temperament | breedApiPipe }}</p>
+            <p><strong>Life Span:</strong> {{ breed!.breeds[0]?.life_span | breedApiPipe }}</p>
+            <p><strong>Origin:</strong> {{ breed!.breeds[0]?.origin | breedApiPipe }}</p>
             <button
               class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               (click)="chosenBreed.set(null)"
@@ -57,11 +64,66 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
         </div>
       }
     </div>
+    <ng-template #likedBreeds let-t>
+      <div class="w-full h-full flex flex-col items-start pt-20 px-2">
+        <h1 class="text-xl font-bold">Number of liked breeds: {{ t.length }}</h1>
+        <div class="mt-4 w-full grid-cols-4">
+          @for (breed of t; track $index) {
+            <button
+              class="w-40 h-40 m-2 p-2 bg-white rounded-lg shadow-md inline-block relative group"
+            >
+              <img
+                class="w-full h-full object-cover rounded-lg"
+                [src]="breed.image.url"
+                [alt]="breed.image.breeds[0]?.name | breedApiPipe"
+              />
+              <div
+                class="absolute bottom-0 left-0 w-full bg-black/90 bg-opacity-50 text-white text-sm p-1 rounded-b-lg transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+              >
+                {{ breed.image.breeds[0]?.name ?? 'A cute unnamed dog' }}
+              </div>
+            </button>
+          }
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #noLikedBreeds>
+      <div class="w-full h-full flex items-center justify-center pt-20 px-2">
+        <h1 class="text-xl font-bold">
+          No liked breeds yet. Go to main page to find your favorite breeds.
+        </h1>
+      </div>
+    </ng-template>
+    <ng-template #loadingTemplate>
+      <div class="w-full h-full flex items-center justify-center pt-20 px-2">
+        <h1 class="text-xl font-bold">Loading your liked breeds...</h1>
+      </div>
+    </ng-template>
   `,
   styles: ``,
 })
 export class Dashboard {
-  protected readonly breedCount = inject(BREED_COUNT);
+  private readonly breedApiService = inject(BreedApiService);
+  private readonly likedBreed = viewChild.required<TemplateRef<BreedContext>>('likedBreeds');
+  private readonly noLikedBreed = viewChild.required<TemplateRef<BreedContext>>('noLikedBreeds');
+  private readonly loadingTemplate =
+    viewChild.required<TemplateRef<BreedContext>>('loadingTemplate');
+
+  readonly breedCount = toSignal<FavoriteBreedResponse[] | null>(
+    this.breedApiService.getFavorites().pipe(
+      shareReplay(),
+      tap((breeds) => breeds.forEach((breed) => console.log('Fetched favorite breed:', breed))),
+    ),
+    { initialValue: null },
+  );
+
+  readonly templateToShow = computed(() =>
+    this.breedCount() == null
+      ? this.loadingTemplate()
+      : this.breedCount()!.length > 0
+        ? this.likedBreed()
+        : this.noLikedBreed(),
+  );
 
   readonly chosenBreed = signal<ApiBreedImage | null>(null);
 
@@ -69,3 +131,81 @@ export class Dashboard {
     this.chosenBreed.set(breed);
   }
 }
+
+@Component({
+  selector: 'app-dashboard-tab-container',
+  template: ` <ng-template> </ng-template> `,
+})
+export class DashboardTabContainer {}
+
+// @Component({
+//   selector: 'app-tab-container',
+//   template: `
+//     <ng-content></ng-content>
+//   `,
+// })
+// class TabContainer {
+
+// }
+
+// <app-liked-breeds>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// <ng-templeate directive="tab name">
+// //component code
+// </ng-template>
+// </app-liked-breeds>
+
+// @Component({
+//  selector: 'app-liked-breeds',
+//   template: `
+//   <ng-template #likedBreeds>
+//     <div class="w-full h-full flex flex-col items-start pt-20 px-2">
+//       <h1 class="text-xl font-bold">
+//         Number of liked breeds: {{ breedCount().length }}
+//       </h1>
+//       <div class="mt-4 w-full grid-cols-4">
+//         @for (breed of breedCount(); track $index) {
+//           <button
+//             class="w-40 h-40 m-2 p-2 bg-white rounded-lg shadow-md inline-block relative group"
+//           >
+//             <img
+//               class="w-full h-full object-cover rounded-lg"
+//               [src]="breed.image.url"
+//               [alt]="breed.image.breeds[0]?.name| breedApiPipe"
+//             />
+//             <div
+//               class="absolute bottom-0 left-0 w-full bg-black/90 bg-opacity-50 text-white text-sm p-1 rounded-b-lg transition-opacity duration-300 opacity-0 group-hover: opacity-100"
+//             >
+//               {{ breed.image.breeds[0]?.name ?? 'A cute unnamed dog' }}
+//             </div>
+//           </button>
+//         }
+//       </div>
+//     </div>
+//   </ng-template>
+//   `,
+// })
+// export class LikedBreeds {
+// readonly tabs = ContentChildren<Directive>(Directive);
+
+// }

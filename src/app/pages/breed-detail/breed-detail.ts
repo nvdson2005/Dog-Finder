@@ -11,29 +11,29 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
       <div class="w-full h-full p-2" [routerLink]="['..']">
         <div class="w-full">
           <h6 class="text-2xl font-bold">Breed Name</h6>
-          <p class="text-xl">{{ breedData.breedName | breedApi }}</p>
+          <p class="text-xl">{{ breedData.breedName | breedApiPipe }}</p>
         </div>
         <div class="w-full">
           <h6 class="text-2xl font-bold">Breed For</h6>
-          <p class="text-xl">{{ breedData.breedFor | breedApi }}</p>
+          <p class="text-xl">{{ breedData.breedFor | breedApiPipe }}</p>
         </div>
         <div class="w-full">
           <h6 class="text-2xl font-bold">Weight and Height</h6>
           <p class="text-xl">
-            {{ breedData.weight | breedApi }} and {{ breedData.height | breedApi }}
+            {{ breedData.weight | breedApiPipe }} and {{ breedData.height | breedApiPipe }}
           </p>
         </div>
         <div class="w-full">
           <h6 class="text-2xl font-bold">Breed Group</h6>
-          <p class="text-xl">{{ breedData.breedGroup | breedApi }}</p>
+          <p class="text-xl">{{ breedData.breedGroup | breedApiPipe }}</p>
         </div>
         <div class="w-full">
           <h6 class="text-2xl font-bold">Temperament</h6>
-          <p class="text-xl">{{ breedData.temperament | breedApi }}</p>
+          <p class="text-xl">{{ breedData.temperament | breedApiPipe }}</p>
         </div>
         <div class="w-full">
           <h6 class="text-2xl font-bold">Life Span</h6>
-          <p class="text-xl">{{ breedData.lifeSpan | breedApi }}</p>
+          <p class="text-xl">{{ breedData.lifeSpan | breedApiPipe }}</p>
         </div>
       </div>
     }

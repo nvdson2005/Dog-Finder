@@ -1,13 +1,12 @@
 import { Component, computed, inject, InjectionToken, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { scan, switchMap } from 'rxjs';
+import { scan, switchMap, tap } from 'rxjs';
 import { BreedApiService } from '@core/api/breed.api';
 import { RouterOutlet } from '@angular/router';
 import { CardActionDirective } from '@directives/card-action.directive';
 import { ApiBreedImage } from '@type/breed';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavBar } from '@components/nav-bar/nav-bar';
-import { BREED_COUNT } from 'src/app/app.routes';
 @Component({
   selector: 'app-main-page',
   imports: [RouterOutlet, CardActionDirective, NavBar],
@@ -32,7 +31,6 @@ import { BREED_COUNT } from 'src/app/app.routes';
   `,
 })
 export class MainPage {
-  private readonly breedCount = inject(BREED_COUNT);
   PAGE_SIZE = new InjectionToken<number>('PAGE_SIZE', {
     factory: () => 10,
   });
@@ -42,6 +40,8 @@ export class MainPage {
   private readonly breedApiService = inject(BreedApiService);
 
   private readonly currentIndex = signal(0);
+  private readonly favoriteResponse = signal<void>(undefined);
+
   private readonly currentPage = computed(
     () => Math.floor(this.currentIndex() / this.infoPerPage) + 1,
   );
@@ -62,8 +62,12 @@ export class MainPage {
 
   nextDog(isLike = false) {
     if (isLike) {
-      this.breedCount.next([...this.breedCount.getValue(), this.currentDog()]);
-      console.log('Liked breeds:', this.breedCount.getValue());
+      this.breedApiService.addToFavorites(this.currentDog().id).pipe(
+        tap(() => {
+          console.log('Breed added to favorites successfully');
+          this.favoriteResponse.set(undefined);
+        })
+      ).subscribe();
     }
     this.currentIndex.update((index) => index + 1);
     if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != null) {

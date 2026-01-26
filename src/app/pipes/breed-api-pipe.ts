@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
-  name: 'breedApi',
+  name: 'breedApiPipe',
   standalone: true,
 })
 export class BreedApiPipe implements PipeTransform {
