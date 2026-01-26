@@ -1,0 +1,72 @@
+import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, TemplateRef } from '@angular/core';
+import { computed, input, viewChild } from '@angular/core';
+import { FavoriteBreedResponse } from '@type/breed';
+import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
+
+@Component({
+  imports: [BreedApiPipe, NgTemplateOutlet, LikedBreedsTabDirective],
+  selector: 'app-dashboard-tab-container',
+  template: `
+    <ng-container
+      [ngTemplateOutlet]="templateToShow()"
+      [ngTemplateOutletContext]="{ $implicit: likedBreedsList() }"
+      appLikedBreedsTab
+    />
+    <ng-template appLikedBreedsTab #likedBreeds let-t>
+      <div class="w-full h-full flex flex-col items-start pt-20 px-2">
+        <h1 class="text-xl font-bold">Number of liked breeds: {{ t.length }}</h1>
+        <div class="mt-4 w-full grid-cols-4">
+          @for (breed of t; track $index) {
+            <button
+              class="w-40 h-40 m-2 p-2 bg-white rounded-lg shadow-md inline-block relative group"
+            >
+              <img
+                class="w-full h-full object-cover rounded-lg"
+                [src]="breed.image.url"
+                [alt]="breed.image.breeds[0]?.name | breedApiPipe"
+              />
+              <div
+                class="absolute bottom-0 left-0 w-full bg-black/90 bg-opacity-50 text-white text-sm p-1 rounded-b-lg transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+              >
+                {{ breed.image.breeds[0]?.name ?? 'A cute unnamed dog' }}
+              </div>
+            </button>
+          }
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #noLikedBreeds>
+      <div class="w-full h-full flex items-center justify-center pt-20 px-2">
+        <h1 class="text-xl font-bold">
+          No liked breeds yet. Go to main page to find your favorite breeds.
+        </h1>
+      </div>
+    </ng-template>
+    <ng-template #loadingTemplate>
+      <div class="w-full h-full flex items-center justify-center pt-20 px-2">
+        <h1 class="text-xl font-bold">Loading your liked breeds...</h1>
+      </div>
+    </ng-template>
+  `,
+})
+export class DashboardTabContainer {
+  readonly isLoading = input(false);
+  readonly likedBreedsList = input<FavoriteBreedResponse[] | null>(null);
+
+  private readonly likedBreedsTemplate =
+    viewChild.required<TemplateRef<BreedContext>>('likedBreeds');
+  private readonly noLikedBreedsTemplate =
+    viewChild.required<TemplateRef<BreedContext>>('noLikedBreeds');
+  private readonly loadingTemplate =
+    viewChild.required<TemplateRef<BreedContext>>('loadingTemplate');
+
+  readonly templateToShow = computed(() =>
+    this.isLoading()
+      ? this.loadingTemplate()
+      : this.likedBreedsList() && this.likedBreedsList()!.length > 0
+        ? this.likedBreedsTemplate()
+        : this.noLikedBreedsTemplate(),
+  );
+}
