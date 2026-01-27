@@ -16,14 +16,17 @@ import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
     <ng-template appLikedBreedsTab #likedBreeds let-breeds>
       <div class="w-full h-full flex flex-col items-start pt-20 px-2">
         <h1 class="text-xl font-bold">Number of liked breeds: {{ breeds.length }}</h1>
-        <div class="mt-4 w-full grid-cols-4">
+        <div class="mt-4 w-full grid grid-cols-7 gap-4">
           @for (breed of breeds; track $index) {
             <div
               class="w-40 h-40 m-2 p-2 bg-white rounded-lg shadow-md inline-block relative group"
             >
-            <button class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700  transition-colors duration-300  z-10 group-hover:opacity-100 opacity-0" (click)="emitRemoveEvent(breed.id)">
-              &times;
-            </button>
+              <button
+                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700  transition-colors duration-300  z-10 group-hover:opacity-100 opacity-0"
+                (click)="emitRemoveEvent(breed.id)"
+              >
+                &times;
+              </button>
               <img
                 class="w-full h-full object-cover rounded-lg"
                 [src]="breed.image.url"
@@ -32,7 +35,11 @@ import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
               <div
                 class="absolute flex items-center justify-center bottom-0 left-0 w-full bg-black/90 bg-opacity-50 text-white text-sm p-1 rounded-b-lg transition-opacity duration-300 opacity-0 group-hover:opacity-100"
               >
-                {{ breed.image.breeds[0]?.name ?? 'A cute unnamed dog' }}
+                {{
+                  breed.image.breeds[0]?.name && breed.image.breeds[0]?.name !== ''
+                    ? breed.image.breeds[0]?.name
+                    : 'A cute unnamed dog'
+                }}
               </div>
             </div>
           }
