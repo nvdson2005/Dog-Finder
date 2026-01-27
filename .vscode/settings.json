@@ -18,7 +18,7 @@
     "Cache/": true,
     "Libraries/": true
   },
-  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.colorTheme": "One Dark Pro Night Flat",
   "editor.semanticTokenColorCustomizations": {
     "rules": {
       "*.deprecated": {
@@ -26,5 +26,6 @@
       }
     }
   },
-  "path-intellisense.extensionOnImport": true
+  "path-intellisense.extensionOnImport": true,
+  "terminal.integrated.profiles.osx": { "zsh": { "path": "/bin/zsh", "args": ["-l", "-i"] } }
 }

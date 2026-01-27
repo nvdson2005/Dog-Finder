@@ -59,3 +59,11 @@ export type ApiBreedImage = {
   width: number;
   height: number;
 };
+
+export type FavoriteBreedResponse = {
+  created_at: string;
+  id: number;
+  image: ApiBreedImage;
+  image_id: string;
+  sub_id: string;
+};
