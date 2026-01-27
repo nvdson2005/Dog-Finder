@@ -1,7 +1,6 @@
 import { Component, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ChooseQuantity } from './controls/choose-quantity/choose-quantity';
-import { tap } from 'rxjs';
 
 export type BreedFormSubmit = {
   breedName: string;
@@ -42,27 +41,25 @@ export type BreedFormSubmit = {
             <legend class="mb-1 font-medium text-slate-800">Breed Age</legend>
             <app-choose-quantity
               [minValue]="0"
-              [maxValue]="10"
+              [maxValue]="100"
               formControlName="breedAge"
             ></app-choose-quantity>
           </div>
           <div>
             <legend class="mb-1 font-medium text-slate-800">Breed Weight</legend>
-            <input
+            <app-choose-quantity
+              [minValue]="0"
+              [maxValue]="200"
               formControlName="breedWeight"
-              type="number"
-              placeholder="Breed Weight"
-              class="border p-2 rounded w-full"
-            />
+            ></app-choose-quantity>
           </div>
           <div>
             <legend class="mb-1 font-medium text-slate-800">Breed Height</legend>
-            <input
+            <app-choose-quantity
+              [minValue]="0"
+              [maxValue]="150"
               formControlName="breedHeight"
-              type="number"
-              placeholder="Breed Height"
-              class="border p-2 rounded w-full"
-            />
+            ></app-choose-quantity>
           </div>
           <div>
             <legend class="mb-1 font-medium text-slate-800">Breed Group</legend>
@@ -137,6 +134,10 @@ export class BreedForm {
   readonly formClosed = output<void>();
 
   onSubmit() {
+    if (this.breedForm.invalid) {
+      console.error('Form is invalid');
+      return;
+    }
     this.breedSubmitted.emit({
       breedName: this.breedForm.value.breedName || '',
       breedAge: this.breedForm.value.breedAge || 0,
@@ -148,12 +149,4 @@ export class BreedForm {
       breedImageUrl: this.breedForm.value.breedImageUrl || '',
     });
   }
-
-  private formError = this.breedForm.statusChanges
-    .pipe(
-      tap((status) => {
-        console.log('Form Status:', status);
-      }),
-    )
-    .subscribe();
 }

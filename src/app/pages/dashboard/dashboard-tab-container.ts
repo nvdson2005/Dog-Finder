@@ -35,7 +35,11 @@ import { LikedBreedsTabDirective, BreedContext } from './dashboard.directives';
               <div
                 class="absolute flex items-center justify-center bottom-0 left-0 w-full bg-black/90 bg-opacity-50 text-white text-sm p-1 rounded-b-lg transition-opacity duration-300 opacity-0 group-hover:opacity-100"
               >
-                {{ breed.image.breeds[0]?.name ?? 'A cute unnamed dog' }}
+                {{
+                  breed.image.breeds[0]?.name && breed.image.breeds[0]?.name !== ''
+                    ? breed.image.breeds[0]?.name
+                    : 'A cute unnamed dog'
+                }}
               </div>
             </div>
           }
