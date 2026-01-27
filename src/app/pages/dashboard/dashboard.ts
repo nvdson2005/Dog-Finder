@@ -6,10 +6,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, switchMap, tap } from 'rxjs';
 import { DashboardTabContainer } from './dashboard-tab-container';
 import { BreedContext } from './dashboard.directives';
-
+import { BreedForm } from '@components/forms/breed-form/breed-form';
+import { BreedFormSubmit } from '@components/forms/breed-form/breed-form';
 @Component({
   selector: 'app-dashboard',
-  imports: [DashboardTabContainer, NavBar],
+  imports: [DashboardTabContainer, NavBar, BreedForm],
   providers: [BreedApiService],
   template: `
     <div class="w-screen h-screen bg-slate-200">
@@ -19,7 +20,10 @@ import { BreedContext } from './dashboard.directives';
         [likedBreedsList]="breedCount()"
         (breedRemoved)="this.removeFromFavorites($event)"
       ></app-dashboard-tab-container>
-      <button (click)="toggleAddForm()" class="fixed bottom-5 right-5 w-15 h-15 bg-slate-500 rounded-xl flex items-center justify-center">
+      <button
+        (click)="toggleAddForm()"
+        class="fixed bottom-5 right-5 w-15 h-15 bg-slate-500 rounded-xl flex items-center justify-center"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-8 w-8 text-white m-3"
@@ -33,38 +37,10 @@ import { BreedContext } from './dashboard.directives';
       </button>
     </div>
     @if (openAddForm() === true) {
-      <div class="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
-        <div class="bg-white p-6 rounded shadow-md w-96">
-          <h2 class="text-xl font-bold mb-4">Add New Breed to Favorites</h2>
-          <form>
-            <div class="mb-4">
-              <label for="breedId" class="block text-gray-700">Breed ID:</label>
-              <input
-                id="breedId"
-                formControlName="breedId"
-                type="text"
-                class="w-full px-3 py-2 border rounded"
-                placeholder="Enter Breed ID"
-              />
-            </div>
-            <div class="flex justify-end">
-              <button
-                type="button"
-                (click)="toggleAddForm()"
-                class="mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                Add to Favorites
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+      <app-breed-form
+        (formClosed)="toggleAddForm()"
+        (breedSubmitted)="onReceiveNewBreed($event)"
+      ></app-breed-form>
     }
   `,
   styles: ``,
@@ -113,5 +89,21 @@ export class Dashboard {
 
   toggleAddForm() {
     this.openAddForm.update((current) => !current);
+  }
+
+  onReceiveNewBreed(breed: BreedFormSubmit) {
+    this.breedCount()?.push({
+      id: Math.random(),
+      created_at: new Date().toISOString(),
+      image_id: '',
+      sub_id: '',
+      image: {
+        id: '',
+        url: breed.breedImageUrl,
+        breeds: [],
+        width: 0,
+        height: 0,
+      },
+    });
   }
 }
