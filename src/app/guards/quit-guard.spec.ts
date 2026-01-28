@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
+import { CanDeactivateFn } from '@angular/router';
 
 import { quitGuard } from './quit-guard';
+import { MainPage } from '@pages/main-page/main-page';
 
 describe('quitGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => quitGuard(...guardParameters));
+  const executeGuard: CanDeactivateFn<MainPage> = quitGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
