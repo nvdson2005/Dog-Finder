@@ -3,7 +3,7 @@ import { NavBar } from '@components/nav-bar/nav-bar';
 import { ApiBreedImage, FavoriteBreedResponse } from '@type/breed';
 import { BreedApiService } from '@core/api/breed.api';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, switchMap } from 'rxjs';
 import { DashboardTabContainer } from './dashboard-tab-container';
 import { BreedContext } from './dashboard.directives';
 import { BreedForm } from '@components/forms/breed-form/breed-form';
@@ -11,7 +11,6 @@ import { BreedFormSubmit } from '@components/forms/breed-form/breed-form';
 @Component({
   selector: 'app-dashboard',
   imports: [DashboardTabContainer, NavBar, BreedForm],
-  providers: [BreedApiService],
   template: `
     <div class="w-screen h-screen bg-slate-200">
       <app-nav-bar></app-nav-bar>
@@ -54,13 +53,10 @@ export class Dashboard {
 
   private readonly refreshFavorites$ = new BehaviorSubject<void>(undefined);
 
-  readonly breedCount = toSignal<FavoriteBreedResponse[] | null>(
+  protected readonly breedCount = toSignal<FavoriteBreedResponse[] | null>(
     this.refreshFavorites$.pipe(
       switchMap(() => {
         return this.breedApiService.getFavorites();
-      }),
-      tap(() => {
-        console.log('Fetched favorite breeds');
       }),
     ),
     { initialValue: null },
@@ -81,10 +77,9 @@ export class Dashboard {
     this.chosenBreed.set(breed);
   }
 
-  removeFromFavorites(breedId: number) {
-    this.breedApiService.removeFromFavorites(breedId).subscribe(() => {
-      this.refreshFavorites$.next();
-    });
+  async removeFromFavorites(breedId: number) {
+    await firstValueFrom(this.breedApiService.removeFromFavorites(breedId));
+    this.refreshFavorites$.next();
   }
 
   toggleAddForm() {

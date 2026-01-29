@@ -13,4 +13,10 @@ describe('App', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
+
+  it(`should have as title 'DogFinder'`, () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance
+    expect(app['title']()).toBe('DogFinder');
+  });
 });

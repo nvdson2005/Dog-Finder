@@ -101,13 +101,13 @@ export type BreedFormSubmit = {
             <button
               type="button"
               (click)="formClosed.emit()"
-              class="w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition mr-2"
+              class="cancel w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition mr-2"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+              class="submit w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
             >
               Add Breed
             </button>
