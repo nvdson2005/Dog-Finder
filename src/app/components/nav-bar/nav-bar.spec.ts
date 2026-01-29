@@ -1,6 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavBar } from './nav-bar';
+import { provideRouter } from '@angular/router';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-mock-home',
+  template: `<p>Mock Home Component</p>`,
+})
+class MockHomeComponent {}
+
+@Component({
+  selector: 'app-mock-dashboard',
+  template: `<p>Mock Dashboard Component</p>`,
+})
+class MockDashboardComponent {
+}
 
 describe('NavBar', () => {
   let component: NavBar;
@@ -8,7 +23,13 @@ describe('NavBar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavBar]
+      imports: [NavBar],
+      providers: [
+        provideRouter([
+          {path: '', loadChildren: () => MockHomeComponent},
+          {path: 'dashboard', loadChildren: () => MockDashboardComponent},
+        ])
+      ]
     })
     .compileComponents();
 

@@ -7,8 +7,8 @@ import { environment } from '@environments/environment.development';
 
 @Injectable()
 export class BreedApiService {
-  private readonly baseUrl = inject(BASE_API_URL);
-  private readonly httpClient = inject(HttpClient);
+  protected readonly baseUrl = inject(BASE_API_URL);
+  protected readonly httpClient = inject(HttpClient);
 
   fetchBreedInfo(limit = 10, page = 1) {
     const apiUrl = new URL('/v1/images/search', this.baseUrl);
