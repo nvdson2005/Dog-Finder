@@ -7,7 +7,12 @@ const catchApiError =
     inputObservable.pipe(
       catchError((error) => {
         console.error(`${message}`, error);
-        return throwError(() => new Error(message));
+        return throwError(() => ({
+          message,
+          originalError: error,
+          status: error.status,
+          statusText: error.statusText,
+        }));
       }),
     );
 
