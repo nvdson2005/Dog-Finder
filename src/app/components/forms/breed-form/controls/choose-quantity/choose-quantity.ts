@@ -1,6 +1,4 @@
 import { Component, input, signal } from '@angular/core';
-type ValueChangeFn = (newValue: number) => void;
-type TouchedChangeFn = (newValue: boolean) => void;
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -9,6 +7,8 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
+type ValueChangeFn = (newValue: number) => void;
+type TouchedChangeFn = (newValue: boolean) => void;
 @Component({
   selector: 'app-choose-quantity',
   imports: [],

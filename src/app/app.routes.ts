@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { quitGuard } from './guards/quit-guard';
 import { BASE_API_URL } from '@core/api/api.token';
 import { environment } from '@environments/environment.development';
+import { BreedApiService } from '@core/api/breed.api';
 
 export const routes: Routes = [
   {
@@ -10,7 +11,8 @@ export const routes: Routes = [
       {
         provide: BASE_API_URL,
         useValue: environment.BASE_DOG_URL,
-      }
+      },
+      BreedApiService,
     ],
     children: [
       {

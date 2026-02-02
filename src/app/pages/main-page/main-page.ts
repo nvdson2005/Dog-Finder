@@ -1,6 +1,6 @@
 import { Component, computed, inject, InjectionToken, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { scan, switchMap, tap } from 'rxjs';
+import { firstValueFrom, scan, switchMap } from 'rxjs';
 import { BreedApiService } from '@core/api/breed.api';
 import { RouterOutlet } from '@angular/router';
 import { CardActionDirective } from '@directives/card-action.directive';
@@ -35,39 +35,35 @@ export class MainPage {
     factory: () => 10,
   });
 
-  private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly breedApiService = inject(BreedApiService);
+  protected readonly router = inject(Router);
+  protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly breedApiService = inject(BreedApiService);
 
-  private readonly currentIndex = signal(0);
-  private readonly favoriteResponse = signal<void>(undefined);
+  protected readonly currentIndex = signal(0);
+  protected readonly favoriteResponse = signal<void>(undefined);
 
-  private readonly currentPage = computed(
+  protected readonly currentPage = computed(
     () => Math.floor(this.currentIndex() / this.infoPerPage) + 1,
   );
 
   private readonly infoPerPage = inject(this.PAGE_SIZE);
 
-  readonly currentPage$ = toObservable(this.currentPage);
-  readonly dogList$ = this.currentPage$.pipe(
+  protected readonly currentPage$ = toObservable(this.currentPage);
+  protected readonly dogList$ = this.currentPage$.pipe(
     switchMap((page) => this.breedApiService.fetchBreedInfo(this.infoPerPage, page)),
     scan((allDogs, newDogs) => [...allDogs, ...newDogs], [] as ApiBreedImage[]),
   );
-  readonly dogList = toSignal(this.dogList$, { initialValue: [] });
+  protected readonly dogList = toSignal(this.dogList$, { initialValue: [] });
 
-  readonly currentDog = computed(() => {
+  protected readonly currentDog = computed(() => {
     const currentIndex = this.currentIndex();
     return this.dogList()[currentIndex];
   });
 
-  nextDog(isLike = false) {
+  async nextDog(isLike = false) {
     if (isLike) {
-      this.breedApiService.addToFavorites(this.currentDog().id).pipe(
-        tap(() => {
-          console.log('Breed added to favorites successfully');
-          this.favoriteResponse.set(undefined);
-        })
-      ).subscribe();
+      await firstValueFrom(this.breedApiService.addToFavorites(this.currentDog().id));
+      this.favoriteResponse.update((_) => _);
     }
     this.currentIndex.update((index) => index + 1);
     if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != null) {

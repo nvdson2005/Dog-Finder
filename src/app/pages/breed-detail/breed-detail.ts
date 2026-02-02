@@ -9,29 +9,29 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
   template: `
     @if (breedData(); as breedData) {
       <div class="w-full h-full p-2" [routerLink]="['..']">
-        <div class="w-full">
+        <div class="w-full breed-name">
           <h6 class="text-2xl font-bold">Breed Name</h6>
           <p class="text-xl">{{ breedData.breedName | breedApiPipe }}</p>
         </div>
-        <div class="w-full">
+        <div class="w-full breed-for">
           <h6 class="text-2xl font-bold">Breed For</h6>
           <p class="text-xl">{{ breedData.breedFor | breedApiPipe }}</p>
         </div>
-        <div class="w-full">
+        <div class="w-full weight-height">
           <h6 class="text-2xl font-bold">Weight and Height</h6>
           <p class="text-xl">
             {{ breedData.weight | breedApiPipe }} and {{ breedData.height | breedApiPipe }}
           </p>
         </div>
-        <div class="w-full">
+        <div class="w-full breed-group">
           <h6 class="text-2xl font-bold">Breed Group</h6>
           <p class="text-xl">{{ breedData.breedGroup | breedApiPipe }}</p>
         </div>
-        <div class="w-full">
+        <div class="w-full temperament">
           <h6 class="text-2xl font-bold">Temperament</h6>
           <p class="text-xl">{{ breedData.temperament | breedApiPipe }}</p>
         </div>
-        <div class="w-full">
+        <div class="w-full life-span">
           <h6 class="text-2xl font-bold">Life Span</h6>
           <p class="text-xl">{{ breedData.lifeSpan | breedApiPipe }}</p>
         </div>
