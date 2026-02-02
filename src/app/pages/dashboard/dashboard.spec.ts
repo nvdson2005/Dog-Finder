@@ -20,9 +20,6 @@ class MockBreedApiService implements Partial<BreedApiService> {
   addToFavorites(_breedId: string): Observable<object> {
     return new Observable<object>();
   }
-  //  addToFavorites(_breedId: string): Observable<any> {
-  //   return new Observable();
-  // }
   removeFromFavorites(_favoriteId: number): Observable<object> {
     return of({});
   }
