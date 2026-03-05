@@ -13,10 +13,10 @@ import { NavBar } from '@components/nav-bar/nav-bar';
   providers: [BreedApiService],
   template: `
     <app-nav-bar></app-nav-bar>
-    <div class="w-screen h-screen flex items-center justify-center">
-      <div class="w-120 h-160 p-2 bg-slate-500 flex flex-col items-center justify-center">
-        <div class="w-full flex-4/5 bg-blue-100 relative ">
-          <div class="absolute w-full h-full overflow-hidden">
+    <div class="w-screen h-screen flex items-center justify-center bg-surface">
+      <div class="w-120 h-160 p-2 bg-surface-raised flex flex-col items-center justify-center rounded-2xl">
+        <div class="w-full flex-4/5 bg-surface relative rounded-2xl">
+          <div class="absolute w-full h-full overflow-hidden rounded-2xl">
             <router-outlet [routerOutletData]="currentDog()" />
           </div>
         </div>

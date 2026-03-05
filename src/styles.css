@@ -1,2 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'tailwindcss';
+
+/* Example of a custom global style */
+@theme {
+  --color-honey-900: #3D1F00;
+  --color-honey-600: #E8701A;
+  --color-honey-400: #F0A056;
+  --color-honey-200: #FFDFC4;
+  --color-honey-50:  #FFF8F0;
+
+  --color-primary:        var(--color-honey-600);
+  --color-primary-light:  var(--color-honey-400);
+  --color-surface:        var(--color-honey-50);
+  --color-surface-raised: var(--color-honey-200);
+  --color-text:           var(--color-honey-900);
+  --color-text-muted:     var(--color-honey-400);
+}
+
+/* @utility {
+
+} */
