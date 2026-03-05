@@ -1,0 +1,31 @@
+{
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript",
+    "css": "css"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/*.meta": true,
+    "**/*.fbx": true,
+    "Cache/": true,
+    "Libraries/": true
+  },
+  "workbench.colorTheme": "One Dark Pro Night Flat",
+  "editor.semanticTokenColorCustomizations": {
+    "rules": {
+      "*.deprecated": {
+        "fontStyle": "strikethrough"
+      }
+    }
+  },
+  "path-intellisense.extensionOnImport": true,
+  "terminal.integrated.profiles.osx": { "zsh": { "path": "/bin/zsh", "args": ["-l", "-i"] } }
+}

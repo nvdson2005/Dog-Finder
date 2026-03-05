@@ -1,59 +1,144 @@
 # DogFinder
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.5.
+A Tinder-style dog breed discovery app built with Angular 21. Browse random dog breeds, like the ones you love, and manage your favorites in a dedicated dashboard.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Browse Mode** — Swipe through dog breed cards one by one. Like or dislike each breed with a single click.
+- **Breed Details** — Click a breed card to see detailed information: name, breed group, temperament, weight, height, life span, and purpose.
+- **Dashboard** — View all your liked breeds in one place. Remove favorites or manually add custom breeds via a form.
+- **Custom Breed Entry** — Add any breed to your favorites manually, including name, age, weight, height, group, temperament, life span, and an image URL.
+- **Quit Guard** — A confirmation prompt protects unsaved state when navigating away from the main browsing page.
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Angular 21 (standalone components) |
+| Styling | Tailwind CSS v4 |
+| State | Angular Signals + RxJS 7 |
+| Forms | Angular Reactive Forms |
+| Rendering | Angular SSR (@angular/ssr + Express 5) |
+| Testing | Vitest |
+| Linting | ESLint + angular-eslint |
+| API | [The Dog API](https://www.thedogapi.com/) |
+
+## Project Structure
+
+```
+src/
+  app/
+    components/
+      forms/breed-form/        # Modal form for adding a custom breed
+      nav-bar/                 # Top navigation bar
+    core/
+      api/                     # BreedApiService + injection token
+      interceptors/            # Auth (API key) and error HTTP interceptors
+    directives/
+      card-action.directive    # Applies like/dislike visual feedback to buttons
+    guards/
+      quit-guard               # CanDeactivate guard for the main page
+    pages/
+      main-page/               # Tinder-style browsing layout
+      breed-image/             # Default child route — shows a random breed image
+      breed-detail/            # Child route — shows full breed details
+      dashboard/               # Favorites management page
+    pipes/
+      breed-api-pipe           # Transforms raw API values for display
+    shared/utils/              # API mapping utilities
+    types/                     # TypeScript interfaces for API responses
+  environments/                # Environment configuration files
+```
+
+## Routing
+
+| Path | Component | Description |
+|---|---|---|
+| `/` | `MainPage` + `BreedImageComponent` | Landing page with a random breed image |
+| `/:breedId` | `MainPage` + `BreedDetailsComponent` | Breed details overlay |
+| `/dashboard` | `Dashboard` | Liked breeds management |
+| `/**` | — | Redirects to `/` |
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- npm 11+
+
+### Installation
 
 ```bash
+npm install
+```
+
+### Environment Configuration
+
+Create `src/environments/environment.development.ts` with the following shape:
+
+```ts
+export const environment = {
+  BASE_DOG_URL: 'https://api.thedogapi.com',
+  API_KEY: 'your-api-key-here',
+  USER_ID: 'your-user-id-here',
+};
+```
+
+You can get a free API key from [The Dog API](https://www.thedogapi.com/).
+
+### Development Server
+
+```bash
+npm start
+# or
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`. The app reloads automatically on file changes.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Production Build
 
 ```bash
-ng generate component component-name
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Build artifacts are placed in the `dist/` directory.
+
+### SSR Server
 
 ```bash
-ng generate --help
+npm run serve:ssr:DogFinder
 ```
 
-## Building
-
-To build the project run:
+### Watch Mode
 
 ```bash
-ng build
+npm run watch
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Testing
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Unit tests use [Vitest](https://vitest.dev/).
 
 ```bash
+npm test
+# or
 ng test
 ```
 
-## Running end-to-end tests
+Tests cover components, pages, pipes, interceptors, and directives.
 
-For end-to-end (e2e) testing, run:
+## Linting
 
 ```bash
-ng e2e
+npm run lint
+# or
+ng lint
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Architecture Notes
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Lazy loading** — all page components are loaded on demand via `loadComponent`.
+- **Token-based DI** — `BASE_API_URL` is provided at the route level, making the API service configurable per route subtree.
+- **Signals + RxJS interop** — the app uses Angular Signals for local state and `toSignal`/`toObservable` to bridge with RxJS streams (e.g. paginated breed fetching via `scan`).
+- **HTTP interceptors** — `authInterceptor` injects the API key into every request; `errorInterceptor` handles API errors globally.
