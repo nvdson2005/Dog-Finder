@@ -12,14 +12,14 @@ export class CardActionDirective {
   readonly appCardAction = input<CardActionType>();
   readonly colorClass = computed(() => {
     const baseClass =
-      'w-full h-full py-2 rounded-full cursor-pointer transition-colors duration-200 ';
+      'w-full h-full py-2 rounded-full cursor-pointer hover:scale-110 transition-transform duration-100';
     switch (this.appCardAction()) {
       case 'like':
-        return baseClass + 'text-white bg-primary hover:bg-primary';
+        return baseClass + ' font-bold ' + 'text-slate-100 bg-primary';
       case 'dislike':
-        return baseClass + 'text-text bg-primary-light hover:bg-primary';
+        return baseClass + ' font-bold ' + 'text-text bg-primary-light';
       default:
-        return baseClass + 'bg-gray-500 hover:bg-gray-700';
+        return baseClass + ' font-bold ' + 'bg-gray-500 hover:bg-gray-700';
     }
   });
   handleClick($event: Event) {
