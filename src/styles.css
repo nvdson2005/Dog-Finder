@@ -22,15 +22,49 @@ body {
   font-family: Montserrat, serif;
   font-weight: 400;
 }
+.animate-swipe-left {
+  animation: swipe-left 1s ease-in-out forwards;
+}
 
-/* .montserrat-<uniquifier> {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-} */
+.animate-swipe-right {
+  animation: swipe-right 1s ease-in-out forwards;
+}
 
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out forwards;
+}
 
-/* @utility {
+@keyframes swipe-left {
+  0% {
+    transform: translateX(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-150%) rotate(-20deg);
+    opacity: 0;
+  }
+  /* 100% {
+    transform: translate(0) rotate(0);
+    opacity: 1;
+  } */
+}
 
-} */
+@keyframes swipe-right {
+  0% {
+    transform: translateX(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(150%) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

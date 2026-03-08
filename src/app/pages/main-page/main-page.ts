@@ -1,12 +1,14 @@
 import { Component, computed, inject, InjectionToken, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { firstValueFrom, scan, switchMap } from 'rxjs';
+import { firstValueFrom, scan, Subject, switchMap } from 'rxjs';
 import { BreedApiService } from '@core/api/breed.api';
 import { RouterOutlet } from '@angular/router';
 import { CardActionDirective } from '@directives/card-action.directive';
 import { ApiBreedImage } from '@type/breed';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavBar } from '@components/nav-bar/nav-bar';
+
+type CardState = 'like' | 'dislike' | 'none';
 @Component({
   selector: 'app-main-page',
   imports: [RouterOutlet, CardActionDirective, NavBar],
@@ -14,7 +16,16 @@ import { NavBar } from '@components/nav-bar/nav-bar';
   template: `
     <app-nav-bar></app-nav-bar>
     <div class="w-screen h-screen flex items-center justify-center bg-surface">
-      <div class="w-120 h-160 p-2 bg-primary-super-light flex flex-col items-center justify-center rounded-2xl">
+      <div
+        [class]="
+          cardState() === 'like'
+            ? 'animate-swipe-right'
+            : cardState() === 'dislike'
+              ? 'animate-swipe-left'
+              : 'animate-scale-in'
+        "
+        class="w-120 h-160 p-2 bg-primary-super-light flex flex-col items-center justify-center rounded-2xl"
+      >
         <div class="w-full flex-4/5 bg-surface relative rounded-2xl">
           <div class="absolute w-full h-full overflow-hidden rounded-2xl">
             <router-outlet [routerOutletData]="currentDog()" />
@@ -23,7 +34,7 @@ import { NavBar } from '@components/nav-bar/nav-bar';
         <div class="w-full flex-1/5">
           <div class="w-full h-full flex py-3 items-center justify-between gap-56 px-4">
             <button (click)="nextDog(false)" [appCardAction]="'dislike'">Skip</button>
-            <button (click)="nextDog(true)" [appCardAction]="'like'" >Like</button>
+            <button (click)="nextDog(true)" [appCardAction]="'like'">Like</button>
           </div>
         </div>
       </div>
@@ -34,6 +45,9 @@ export class MainPage {
   PAGE_SIZE = new InjectionToken<number>('PAGE_SIZE', {
     factory: () => 10,
   });
+
+  protected readonly cardState$ = new Subject<CardState>();
+  protected readonly cardState = toSignal(this.cardState$, { initialValue: 'none' });
 
   protected readonly router = inject(Router);
   protected readonly activatedRoute = inject(ActivatedRoute);
@@ -61,11 +75,18 @@ export class MainPage {
   });
 
   async nextDog(isLike = false) {
+    this.currentIndex.update((index) => index + 1);
     if (isLike) {
+      this.cardState$.next('like');
       await firstValueFrom(this.breedApiService.addToFavorites(this.currentDog().id));
       this.favoriteResponse.update((_) => _);
+    } else {
+      this.cardState$.next('dislike');
     }
-    this.currentIndex.update((index) => index + 1);
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    this.cardState$.next('none');
+
     if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != null) {
       this.router.navigate([this.currentDog().id]);
     }
