@@ -5,7 +5,7 @@ import { ROUTER_OUTLET_DATA } from '@angular/router';
 @Component({
   imports: [RouterLink],
   template: `
-    <div class="w-full h-full rounded-2xl" [routerLink]="[breed().id]">
+    <div class="w-full h-full rounded-2xl" [routerLink]="[breed().id]" style="view-transition-name: breed-image-page">
       <img [src]="breed().url" class="w-full h-full object-fit" alt="Dog Breed" />
     </div>
   `,
