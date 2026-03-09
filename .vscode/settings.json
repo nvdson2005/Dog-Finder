@@ -27,5 +27,14 @@
     }
   },
   "path-intellisense.extensionOnImport": true,
-  "terminal.integrated.profiles.osx": { "zsh": { "path": "/bin/zsh", "args": ["-l", "-i"] } }
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "/bin/zsh",
+      "args": [
+        "-l",
+        "-i"
+      ]
+    }
+  },
+  "postman.settings.dotenv-detection-notification-visibility": false
 }

@@ -83,12 +83,10 @@ export class MainPage {
     } else {
       this.cardState$.next('dislike');
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    this.cardState$.next('none');
-
     if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != null) {
       this.router.navigate([this.currentDog().id]);
     }
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    this.cardState$.next('none');
   }
 }
