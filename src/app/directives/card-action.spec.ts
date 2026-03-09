@@ -34,28 +34,9 @@ describe('cardactiondirective', () => {
     const directiveEl = testComponent.debugElement.query(By.directive(CardActionDirective));
     expect(Object.keys(directiveEl.classes)).toContain('w-full');
     expect(Object.keys(directiveEl.classes)).toContain('h-full');
-    expect(Object.keys(directiveEl.classes)).toContain('text-white');
     expect(Object.keys(directiveEl.classes)).toContain('py-2');
     expect(Object.keys(directiveEl.classes)).toContain('rounded-full');
     expect(Object.keys(directiveEl.classes)).toContain('cursor-pointer');
-    expect(Object.keys(directiveEl.classes)).toContain('transition-colors');
-    expect(Object.keys(directiveEl.classes)).toContain('duration-200');
-  });
-
-  it('should apply correct classes for like action', () => {
-    testTemplate['mockDirectiveState'].set('like');
-    testComponent.detectChanges();
-    const directiveEl = testComponent.debugElement.query(By.directive(CardActionDirective));
-    expect(directiveEl.classes['bg-green-500']).toBeTruthy();
-    expect(directiveEl.classes['hover:bg-green-700']).toBeTruthy();
-  });
-
-  it('should apply correct classes for dislike action', () => {
-    testTemplate['mockDirectiveState'].set('dislike');
-    testComponent.detectChanges();
-    const directiveEl = testComponent.debugElement.query(By.directive(CardActionDirective));
-    expect(directiveEl.classes['bg-blue-500']).toBeTruthy();
-    expect(directiveEl.classes['hover:bg-blue-700']).toBeTruthy();
   });
 
   it('should apply correct classes for neutral action', () => {

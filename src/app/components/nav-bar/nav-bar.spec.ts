@@ -52,9 +52,8 @@ describe('NavBar', () => {
     const element = fixture.nativeElement as HTMLElement;
     const links = element.querySelectorAll('a');
     const linkTexts = Array.from(links).map((link) => link.textContent?.trim());
-    expect(linkTexts).toContain('🐶');
     expect(linkTexts).toContain('Dashboard');
-    expect(linkTexts).toContain('🐕‍🦺');
+    expect(linkTexts).toContain('DogFinder');
   });
 
   it('should have correct minimal CSS classes for styling', () => {

@@ -8,7 +8,7 @@ import { BreedApiPipe } from 'src/app/pipes/breed-api-pipe';
   imports: [RouterLink, BreedApiPipe],
   template: `
     @if (breedData(); as breedData) {
-      <div class="w-full h-full p-2" [routerLink]="['..']">
+      <div class="w-full h-full p-2" [routerLink]="['..']" style="view-transition-name: breed-detail-page">
         <div class="w-full breed-name">
           <h6 class="text-2xl font-bold">Breed Name</h6>
           <p class="text-xl">{{ breedData.breedName | breedApiPipe }}</p>

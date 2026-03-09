@@ -1,2 +1,144 @@
-/* You can add global styles to this file, and also import other style files */
 @import 'tailwindcss';
+
+/* Example of a custom global style */
+@theme {
+  --color-honey-900: #3d1f00;
+  --color-honey-600: #e8701a;
+  --color-honey-400: #f0a056;
+  --color-honey-300: #f7cba0;
+  --color-honey-200: #ffdfc4;
+  --color-honey-50: #fff8f0;
+
+  --color-primary: var(--color-honey-600);
+  --color-primary-light: var(--color-honey-400);
+  --color-primary-super-light: var(--color-honey-300);
+  --color-surface: var(--color-honey-50);
+  --color-surface-raised: var(--color-honey-200);
+  --color-text: var(--color-honey-900);
+  --color-text-muted: var(--color-honey-400);
+}
+
+body {
+  font-family: Montserrat, serif;
+  font-weight: 400;
+}
+.animate-swipe-left {
+  animation: swipe-left 0.3s ease-in-out forwards;
+}
+
+.animate-swipe-right {
+  animation: swipe-right 0.3s ease-in-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out forwards;
+}
+
+@keyframes swipe-left {
+  0% {
+    transform: translateX(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-150%) rotate(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-right {
+  0% {
+    transform: translateX(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(150%) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes view-transition-in {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes view-transition-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+::view-transition-old(breed-image-page) {
+  animation: breed-image-out 300ms ease-out forwards;
+}
+
+::view-transition-new(breed-detail-page) {
+  animation: breed-detail-in 300ms ease-out forwards;
+}
+
+::view-transition-old(breed-detail-page) {
+  animation: breed-detail-out 300ms ease-out forwards;
+}
+
+::view-transition-new(breed-image-page) {
+  animation: breed-image-in 300ms ease-out forwards;
+}
+
+@keyframes breed-image-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(150%) rotateZ(40deg) scale(0.98);
+  }
+}
+
+@keyframes breed-image-in {
+  from {
+    opacity: 0;
+    transform: translateX(-150%) translateY(20%) scale(0.98) rotateZ(-40deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1) rotateZ(0);
+  }
+}
+
+@keyframes breed-detail-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes breed-detail-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

@@ -24,7 +24,7 @@ export type BreedFormSubmit = {
       >
         <form
           [formGroup]="breedForm"
-          class="bg-white p-6 rounded shadow-md w-96 flex flex-col gap-4"
+          class="bg-surface p-6 rounded shadow-md w-96 flex flex-col gap-4"
           (ngSubmit)="onSubmit()"
         >
           <div class="text-xl font-bold">Add New Breed to Favorites</div>
@@ -107,7 +107,7 @@ export type BreedFormSubmit = {
             </button>
             <button
               type="submit"
-              class="submit w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+              class="submit w-full bg-primary text-white p-2 rounded hover:bg-blue-600 transition"
             >
               Add Breed
             </button>

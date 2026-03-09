@@ -12,7 +12,7 @@ import { BreedFormSubmit } from '@components/forms/breed-form/breed-form';
   selector: 'app-dashboard',
   imports: [DashboardTabContainer, NavBar, BreedForm],
   template: `
-    <div class="w-screen h-screen bg-slate-200">
+    <div class="w-screen h-screen bg-surface">
       <app-nav-bar></app-nav-bar>
       <app-dashboard-tab-container
         [isLoading]="breedCount() === null"
@@ -21,7 +21,7 @@ import { BreedFormSubmit } from '@components/forms/breed-form/breed-form';
       ></app-dashboard-tab-container>
       <button
         (click)="toggleAddForm()"
-        class="fixed bottom-5 right-5 w-15 h-15 bg-slate-500 rounded-xl flex items-center justify-center"
+        class="fixed bottom-5 right-5 w-15 h-15 bg-primary rounded-xl flex items-center justify-center"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
