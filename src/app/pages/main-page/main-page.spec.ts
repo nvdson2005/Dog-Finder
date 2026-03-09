@@ -14,6 +14,7 @@ const MOCK_BASE_API_URL = new InjectionToken('MOCK_BASE_API_URL', {
   factory: () => 'https://mock-api.com',
 });
 
+vi.mock('@core/api/breed.api');
 @Injectable()
 class MockBreedApiService extends BreedApiService {
   override fetchBreedInfo() {
@@ -92,22 +93,34 @@ describe('MainPage', () => {
     expect(component['currentIndex']()).toBe(initialIndex + 1);
   });
 
-  // it('should call addToFavorites on like', async () => {
-  //   vi.spyOn(component['breedApiService'], 'addToFavorites');
-  //   component['dogList']().push(...mockDogs);
-  //   component['currentIndex'].set(1);
-  //   await component.nextDog(true);
-  //   expect(component['breedApiService'].addToFavorites).toHaveBeenCalled();
-  //   expect(component['currentIndex']()).toBe(1);
-  // });
+  it(
+    'should call addToFavorites on like',
+    {
+      timeout: 10000,
+    },
+    async () => {
+      component['breedApiService'].addToFavorites = vi.fn().mockReturnValue(from([{}]));
+      component['dogList']().push(...mockDogs);
+      component['currentIndex'].set(1);
+      await component.nextDog(true);
+      expect(component['breedApiService'].addToFavorites).toHaveBeenCalled();
+      expect(component['currentIndex']()).toBe(2);
+    },
+  );
 
-  // it('should not call addToFavorites on dislike', async () => {
-  //   vi.spyOn(component['breedApiService'], 'addToFavorites');
-  //   component['dogList']().push(...mockDogs);
-  //   component['currentIndex'].set(1);
-  //   const initialIndex = component['currentIndex']();
-  //   await component.nextDog(false);
-  //   expect(component['breedApiService'].addToFavorites).not.toHaveBeenCalled();
-  //   expect(component['currentIndex']()).toBe(initialIndex + 1);
-  // });
+  it(
+    'should not call addToFavorites on dislike',
+    {
+      timeout: 10000,
+    },
+    async () => {
+      component['breedApiService'].addToFavorites = vi.fn().mockReturnValue(from([{}]));
+      component['dogList']().push(...mockDogs);
+      component['currentIndex'].set(1);
+      const initialIndex = component['currentIndex']();
+      await component.nextDog(false);
+      expect(component['breedApiService'].addToFavorites).not.toHaveBeenCalled();
+      expect(component['currentIndex']()).toBe(initialIndex + 1);
+    },
+  );
 });

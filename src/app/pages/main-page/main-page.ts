@@ -75,7 +75,6 @@ export class MainPage {
   });
 
   async nextDog(isLike = false) {
-    this.currentIndex.update((index) => index + 1);
     if (isLike) {
       this.cardState$.next('like');
       await firstValueFrom(this.breedApiService.addToFavorites(this.currentDog().id));
@@ -83,6 +82,7 @@ export class MainPage {
     } else {
       this.cardState$.next('dislike');
     }
+    this.currentIndex.update((index) => index + 1);
     if (this.activatedRoute.firstChild?.snapshot.paramMap.get('breedId') != null) {
       this.router.navigate([this.currentDog().id]);
     }
