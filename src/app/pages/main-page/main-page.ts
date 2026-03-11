@@ -7,8 +7,7 @@ import { CardActionDirective } from '@directives/card-action.directive';
 import { ApiBreedImage } from '@type/breed';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavBar } from '@components/nav-bar/nav-bar';
-
-type CardState = 'like' | 'dislike' | 'none';
+import { CardState } from '@type/card';
 @Component({
   selector: 'app-main-page',
   imports: [RouterOutlet, CardActionDirective, NavBar],
@@ -32,9 +31,10 @@ type CardState = 'like' | 'dislike' | 'none';
           </div>
         </div>
         <div class="w-full flex-1/5">
-          <div class="w-full h-full flex py-3 items-center justify-between gap-56 px-4">
-            <button (click)="nextDog(false)" [appCardAction]="'dislike'">Skip</button>
-            <button (click)="nextDog(true)" [appCardAction]="'like'">Like</button>
+          <div class="w-full flex py-5 items-center justify-between px-4">
+            <button class="aspect-square flex-2" (click)="nextDog(false)" [appCardAction]="'dislike'">Skip</button>
+            <span class="flex-3"></span>
+            <button class="aspect-square flex-2" (click)="nextDog(true)" [appCardAction]="'like'">Like</button>
           </div>
         </div>
       </div>
