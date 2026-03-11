@@ -1,5 +1,5 @@
 import { computed, Directive, input } from '@angular/core';
-import { CardActionType } from '@type/card';
+import { CardState } from '@type/card';
 
 @Directive({
   selector: '[appCardAction]',
@@ -9,7 +9,7 @@ import { CardActionType } from '@type/card';
   },
 })
 export class CardActionDirective {
-  readonly appCardAction = input<CardActionType>();
+  readonly appCardAction = input<CardState>();
   readonly colorClass = computed(() => {
     const baseClass =
       'w-full h-full py-2 rounded-full cursor-pointer hover:scale-110 transition-transform duration-100';
