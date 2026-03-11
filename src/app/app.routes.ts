@@ -6,6 +6,10 @@ import { BreedApiService } from '@core/api/breed.api';
 
 export const routes: Routes = [
   {
+    path: 'onboarding',
+    loadComponent: () => import('@pages/onboarding/onboarding').then((m) => m.Onboarding),
+  },
+  {
     path: '',
     providers: [
       {
