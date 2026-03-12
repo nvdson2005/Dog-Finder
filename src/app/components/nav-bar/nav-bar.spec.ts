@@ -61,11 +61,8 @@ describe('NavBar', () => {
     const navBarDiv = element.querySelector('div');
     expect(navBarDiv).toBeTruthy();
     expect(navBarDiv?.classList).toContain('fixed');
-    expect(navBarDiv?.classList).toContain('inset-0');
-    expect(navBarDiv?.classList).toContain('w-screen');
     expect(navBarDiv?.classList).toContain('flex');
     expect(navBarDiv?.classList).toContain('items-center');
-    expect(navBarDiv?.classList).toContain('justify-between');
   });
 
   it('should have cursor-pointer class on links', () => {

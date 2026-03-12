@@ -2,14 +2,13 @@ import { Component, signal } from '@angular/core';
 import { CardActionDirective } from './card-action.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { CardActionType } from '@type/card';
-
+import { CardState } from '@type/card';
 @Component({
   imports: [CardActionDirective],
   template: `<button [appCardAction]="mockDirectiveState()">Test Content</button>`,
 })
 class TestComponent {
-  mockDirectiveState = signal<CardActionType>('like');
+  mockDirectiveState = signal<CardState>('like');
 }
 
 describe('cardactiondirective', () => {
@@ -40,7 +39,7 @@ describe('cardactiondirective', () => {
   });
 
   it('should apply correct classes for neutral action', () => {
-    testTemplate['mockDirectiveState'].set('idle');
+    testTemplate['mockDirectiveState'].set('none');
     testComponent.detectChanges();
     const directiveEl = testComponent.debugElement.query(By.directive(CardActionDirective));
     expect(directiveEl.classes['bg-gray-500']).toBeTruthy();
