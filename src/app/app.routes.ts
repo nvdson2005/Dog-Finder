@@ -3,6 +3,7 @@ import { quitGuard } from './guards/quit-guard';
 import { BASE_API_URL } from '@core/api/api.token';
 import { environment } from '@environments/environment.development';
 import { BreedApiService } from '@core/api/breed.api';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,7 @@ export const routes: Routes = [
         canDeactivate: [quitGuard],
       },
     ],
+    canActivate: [authGuard],
   },
   {
     path: '**',
