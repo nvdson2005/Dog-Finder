@@ -4,6 +4,7 @@ import { ApiBreedImage, FavoriteBreedResponse } from '@type/breed';
 import { mapApiToBreed } from '@shared/utils/api.util';
 import { BASE_API_URL } from './api.token';
 import { AuthService } from '@core/auth/auth';
+
 @Injectable()
 export class BreedApiService {
   protected readonly authService = inject(AuthService);

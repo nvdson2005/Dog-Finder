@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '@core/auth/auth';
 @Component({
@@ -13,7 +13,7 @@ import { AuthService } from '@core/auth/auth';
           <span class="text-white/80">{{ username }}</span>
           <button
             class="underline ml-4 text-sm text-white/80 hover:text-white transition-colors duration-300"
-            (click)="authSerivce.clearUsername()"
+            (click)="authService.clearUsername()"
           >
             Logout
           </button>
@@ -34,6 +34,6 @@ import { AuthService } from '@core/auth/auth';
   `,
 })
 export class NavBar {
-  protected readonly authSerivce = inject(AuthService);
-  protected readonly username = signal(this.authSerivce.getUsername());
+  protected readonly authService = inject(AuthService);
+  protected readonly username = this.authService.username;
 }
