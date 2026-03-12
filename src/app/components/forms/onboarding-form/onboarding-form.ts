@@ -29,8 +29,8 @@ import { AuthService } from '@core/auth/auth';
   styles: ``,
 })
 export class OnboardingForm {
-  readonly router = inject(Router);
-  readonly authService = inject(AuthService)
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService)
   protected readonly onboardingForm = new FormGroup({
     username: new FormControl('', {
       validators: [Validators.required]

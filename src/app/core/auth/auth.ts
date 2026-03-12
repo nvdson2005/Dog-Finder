@@ -6,19 +6,20 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private readonly router = inject(Router);
-  private readonly username = signal(localStorage.getItem('username') || '');
+  private readonly _username = signal(localStorage.getItem('username') || '');
+  readonly username = this._username.asReadonly();
 
   get isAuthenticated() {
     return !!this.username();
   }
 
   setUsername(username: string) {
-    this.username.set(username);
+    this._username.set(username);
     localStorage.setItem('username', username);
   }
 
   clearUsername() {
-    this.username.set('');
+    this._username.set('');
     localStorage.removeItem('username');
     this.router.navigate(['onboarding']);
   }
